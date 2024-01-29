@@ -2,7 +2,7 @@ package com.example.tmanager;
 
 public class ApplicationData {
     private String AppName;
-    private String AppMemory;
+    private int AppMemory;
 
     public String getAppName() {
         return AppName;
@@ -12,15 +12,15 @@ public class ApplicationData {
         AppName = appName;
     }
 
-    public String getAppMemory() {
+    public int getAppMemory() {
         return AppMemory;
     }
 
-    public void setAppMemory(String appMemory) {
+    public void setAppMemory(int appMemory) {
         AppMemory = appMemory;
     }
 
-    public ApplicationData(String appName, String appMemory) {
+    public ApplicationData(String appName, int appMemory) {
         AppName = appName;
         AppMemory = appMemory;
     }

@@ -12,16 +12,20 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javafx.application.Platform;
+
+public class TManagerController{
 
 
-public class TManagerController {
-
-
-    private ObservableList<ApplicationData> ObList;
+    private static ObservableList<ApplicationData> ObList;
     @FXML
     private ScrollPane Scroll;
     @FXML
@@ -30,11 +34,11 @@ public class TManagerController {
     private Circle circ;
     @FXML
     private Pane TitleBar;
-
+    private Timer timer;
     @FXML
     private TextFlow text;
     @FXML
-    private TableView<ApplicationData> table;
+    public TableView<ApplicationData> table;
     @FXML
     private TableColumn<String,String> application;
     @FXML
@@ -52,21 +56,37 @@ public class TManagerController {
         // Add Text nodes to the TextFlow
         text.getChildren().addAll(textNode1);
         text.setTextAlignment(TextAlignment.CENTER);
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(this::StartThread, 0, 500, TimeUnit.MILLISECONDS);
+        System.out.println("BFB");
     }
-    public ObservableList<ApplicationData> setApplications(HashMap<ApplicationData, ArrayList<ApplicationData>> AllApps){
+
+
+
+    public ObservableList<ApplicationData> setApplications(HashMap<String, ArrayList<ApplicationData>> AllApps) {
         ArrayList<ApplicationData> PureApps = new ArrayList<>();
-        for(Map.Entry<ApplicationData, ArrayList<ApplicationData>> entry : AllApps.entrySet()) {
-            ApplicationData key = entry.getKey();
-            PureApps.add(key);
+        for(Map.Entry<String, ArrayList<ApplicationData>> entry : AllApps.entrySet()) {
+            int Memory = 0;
+            for (int i = 0; i < entry.getValue().size(); i++){
+                int CurrMemory = entry.getValue().get(i).getAppMemory();
+                Memory = Memory + CurrMemory;
+            }
+            String key = entry.getKey();
+            PureApps.add(new ApplicationData(entry.getKey(),Memory));
         }
         ObList = FXCollections.observableList(PureApps);
         table.setItems(ObList);
         return ObList;
     }
-
-
-
-
-    public TManagerController() {
+    public void StartThread(){
+        Platform.runLater(()-> { setApplications(TaskManagerGUI.Categorise(TaskManagerGUI.GrabData()));
+    });
     }
+
+
+
+
+
+
+
 }

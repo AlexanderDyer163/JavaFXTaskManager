@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tmanager.TManagerController">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+         <Pane id="TitleBar" fx:id="TitleBar" layoutX="47.0" layoutY="58.0" prefHeight="34.0" prefWidth="506.0">
+            <children>
+               <TextFlow fx:id="text" lineSpacing="1.0" prefHeight="34.0" prefWidth="506.0" textAlignment="CENTER" />
+            </children>
+         </Pane>
+         <TableView fx:id="table" layoutX="63.0" layoutY="140.0" prefHeight="200.0" prefWidth="476.0">
+           <columns>
+             <TableColumn fx:id="application" prefWidth="128.4000015258789" text="Application" />
+             <TableColumn fx:id="memory" prefWidth="126.0" text="Memory (Kb)" />
+           </columns>
+         </TableView>
+   </children>
+</AnchorPane>
+</VBox>
