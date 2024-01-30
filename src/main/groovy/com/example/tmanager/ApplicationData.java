@@ -8,16 +8,8 @@ public class ApplicationData {
         return AppName;
     }
 
-    public void setAppName(String appName) {
-        AppName = appName;
-    }
-
     public int getAppMemory() {
         return AppMemory;
-    }
-
-    public void setAppMemory(int appMemory) {
-        AppMemory = appMemory;
     }
 
     public ApplicationData(String appName, int appMemory) {

@@ -2,18 +2,13 @@ package com.example.tmanager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,14 +22,7 @@ public class TManagerController{
 
     private static ObservableList<ApplicationData> ObList;
     @FXML
-    private ScrollPane Scroll;
-    @FXML
-    private GridPane grid;
-    @FXML
-    private Circle circ;
-    @FXML
     private Pane TitleBar;
-    private Timer timer;
     @FXML
     private TextFlow text;
     @FXML
@@ -64,14 +52,13 @@ public class TManagerController{
 
 
     public ObservableList<ApplicationData> setApplications(HashMap<String, ArrayList<ApplicationData>> AllApps) {
-        ArrayList<ApplicationData> PureApps = new ArrayList<>();
+        ArrayList<ApplicationData> PureApps = new ArrayList<>();//Holds the required data from the hashmap
         for(Map.Entry<String, ArrayList<ApplicationData>> entry : AllApps.entrySet()) {
             int Memory = 0;
             for (int i = 0; i < entry.getValue().size(); i++){
                 int CurrMemory = entry.getValue().get(i).getAppMemory();
                 Memory = Memory + CurrMemory;
             }
-            String key = entry.getKey();
             PureApps.add(new ApplicationData(entry.getKey(),Memory));
         }
         ObList = FXCollections.observableList(PureApps);

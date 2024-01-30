@@ -48,7 +48,9 @@ public class TaskManagerGUI extends Application {
             Parent root = loader.load();
             //grabs controller id from fxml (TManagerController)
             TManagerController controller = loader.getController();
+            //sets the applications from tasklist
             controller.setApplications(ActSes);
+            //GUI Config
             primaryStage.setTitle("JavaFX Task Manager");
             primaryStage.setScene(new Scene(root, 750, 500));
             primaryStage.centerOnScreen();
@@ -58,7 +60,7 @@ public class TaskManagerGUI extends Application {
         }
     }
 
-        public static HashMap<String, ArrayList<ApplicationData>> Categorise(ArrayList<ApplicationData> x){
+        public static HashMap<String, ArrayList<ApplicationData>> Categorise(ArrayList<ApplicationData> x){//Condenses duplicate applications into one.
             HashMap<String, ArrayList<ApplicationData>> CategoriesResult = new HashMap<>();
             ArrayList<String> DifCategories = new ArrayList<>();
             for (int i = 0; i != x.size();i++){
@@ -82,7 +84,7 @@ public class TaskManagerGUI extends Application {
                 Process p = getRuntime().exec("tasklist.exe /fo csv /nh");
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 while ((line = input.readLine()) != null) {
-                    processes.add(line);        //grabs output from tasklist command
+                    processes.add(line);//grabs output from tasklist command
                 }
             } catch (Exception err) {
                 err.printStackTrace();
@@ -92,7 +94,7 @@ public class TaskManagerGUI extends Application {
                 //splits the output into application and removes unnecessary information
                 List<String> CurrentLine = new ArrayList<>(Arrays.asList(processes.get(i).split(",")));
                 if ((CurrentLine.get(3).equals("\"0\"") == false) && (CurrentLine.get(2).equals("\"Console\"") == true)) {
-                    ActiveSessions.add(new ApplicationData(CurrentLine.get(0).replace("\"",""), Integer.parseInt((CurrentLine.get(4) + CurrentLine.get(5)).replace(" K","").replace("\"",""))));//removes quotation marks from both, and concats items for and 5 as the numbers have comas >= 10000
+                    ActiveSessions.add(new ApplicationData(CurrentLine.get(0).replace("\"",""), Integer.parseInt((CurrentLine.get(4) + CurrentLine.get(5)).replace(" K","").replace("\"",""))));//removes quotation marks from both, and concats items 4 and 5 as the numbers have comas >= 10000
                 }
             }
             return ActiveSessions;
