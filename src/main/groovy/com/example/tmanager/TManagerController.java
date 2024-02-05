@@ -1,6 +1,7 @@
 package com.example.tmanager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,7 +32,8 @@ public class TManagerController{
     private TableColumn<String,String> application;
     @FXML
     private TableColumn<String,String> memory;
-
+    @FXML
+    private String Sorting;
     public void initialize() {
         // Access the Text nodes within the TextFlow
         Text textNode1 = new Text("Task Manager");
@@ -56,24 +58,81 @@ public class TManagerController{
         for(Map.Entry<String, ArrayList<ApplicationData>> entry : AllApps.entrySet()) {
             int Memory = 0;
             for (int i = 0; i < entry.getValue().size(); i++){
-                int CurrMemory = entry.getValue().get(i).getAppMemory();
+                int CurrMemory = entry.getValue().get(i).getAppMemory();//Condenses The Memory of duplicate applications
                 Memory = Memory + CurrMemory;
             }
             PureApps.add(new ApplicationData(entry.getKey(),Memory));
+        }
+        if(Sorting != null){//if sortapps or sortmem button is pressed
+            ArrayList<ApplicationData> Sorted = MergeSort(PureApps);//It will either be merged alphanumerically (string for name of app) or by int (int memory value)
         }
         ObList = FXCollections.observableList(PureApps);
         table.setItems(ObList);
         return ObList;
     }
+
+    private ArrayList<ApplicationData> MergeSort(ArrayList<ApplicationData> AppsArray) {
+
+
+
+        switch (Sorting){
+            case "M":
+                if (AppsArray == null || AppsArray.size() <= 1) {
+                    return AppsArray; // Already sorted
+                }
+
+                    int midData = AppsArray.size()/2;
+                    ArrayList<ApplicationData> LeftHalf = new ArrayList<>(AppsArray.subList(0, midData));
+                    ArrayList<ApplicationData> RightHalf = new ArrayList<>(AppsArray.subList(midData,AppsArray.size()));
+
+                    MergeSort(LeftHalf);
+                    MergeSort(RightHalf);
+                    Merge(AppsArray,LeftHalf,RightHalf);
+
+        }
+    return AppsArray;
+    }
+
+    private ArrayList<ApplicationData> Merge(ArrayList<ApplicationData> AppsArray, ArrayList<ApplicationData> LeftHalf, ArrayList<ApplicationData> RightHalf) {//merges the subarrays
+        int a,b,c;
+
+
+        a = 0;
+        b = 0;
+        c = 0;
+
+        while(a < LeftHalf.size() && b < RightHalf.size()) {
+            if (LeftHalf.get(a).getAppMemory() <= RightHalf.get(b).getAppMemory()) {
+                AppsArray.set(c++, LeftHalf.get(a++));
+            }else {
+                AppsArray.set(c++, RightHalf.get(b++));
+            }
+        }
+
+        while (a < LeftHalf.size()) {
+                AppsArray.set(c++, LeftHalf.get(a++));
+        }
+        while (b < RightHalf.size()) {
+                AppsArray.set(c++, RightHalf.get(b++));
+        }
+
+    return AppsArray;
+    }
+
     public void StartThread(){
         Platform.runLater(()-> { setApplications(TaskManagerGUI.Categorise(TaskManagerGUI.GrabData()));
     });
     }
 
+    @FXML
+    private void SortApps(ActionEvent event){
+        Sorting = "A";
+        event.consume();
+    }
 
-
-
-
-
-
+    @FXML
+    private void SortMem(ActionEvent event){
+        Sorting = "M";
+        event.consume();
+    }
 }
