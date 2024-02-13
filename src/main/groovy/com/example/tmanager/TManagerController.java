@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -63,18 +64,16 @@ public class TManagerController{
             }
             PureApps.add(new ApplicationData(entry.getKey(),Memory));
         }
-        if(Sorting != null){//if sortapps or sortmem button is pressed
-            ArrayList<ApplicationData> Sorted = MergeSort(PureApps);//It will either be merged alphanumerically (string for name of app) or by int (int memory value)
+        ArrayList<ApplicationData> ToBeSorted = PureApps;
+        if( Sorting != null){//if sortapps or sortmem button is pressed
+            ToBeSorted = SortingData(ToBeSorted);//It will either be merged alphanumerically (string for name of app) or by int (int memory value)
         }
-        ObList = FXCollections.observableList(PureApps);
+        ObList = FXCollections.observableList(ToBeSorted);
         table.setItems(ObList);
         return ObList;
     }
 
-    private ArrayList<ApplicationData> MergeSort(ArrayList<ApplicationData> AppsArray) {
-
-
-
+    private ArrayList<ApplicationData> SortingData(ArrayList<ApplicationData> AppsArray) {
         switch (Sorting){
             case "M":
                 if (AppsArray == null || AppsArray.size() <= 1) {
@@ -85,22 +84,38 @@ public class TManagerController{
                     ArrayList<ApplicationData> LeftHalf = new ArrayList<>(AppsArray.subList(0, midData));
                     ArrayList<ApplicationData> RightHalf = new ArrayList<>(AppsArray.subList(midData,AppsArray.size()));
 
-                    MergeSort(LeftHalf);
-                    MergeSort(RightHalf);
+                    SortingData(LeftHalf);
+                    SortingData(RightHalf);
                     Merge(AppsArray,LeftHalf,RightHalf);
+                    break;
+            case "A":
+                ArrayList JustNames = new ArrayList();
+                for (int i = 0; i < AppsArray.size();i++){
+                    JustNames.add(AppsArray.get(i).getAppName());
+                }
+                Collections.sort(JustNames);
+                ArrayList<ApplicationData> FinalArray = new ArrayList();
+                for (int i = 0; i < AppsArray.size();i++){
+                    for (int j = 0; j < AppsArray.size();j++){
+                        if (JustNames.get(i) == AppsArray.get(j).getAppName()){
+                            FinalArray.add(AppsArray.get(j));
+                            //FinalArray.set(i, new ApplicationData("FINAL",0));
 
+                        }
+                    }
+                }
+                AppsArray = FinalArray;
+                break;
         }
+
     return AppsArray;
     }
 
     private ArrayList<ApplicationData> Merge(ArrayList<ApplicationData> AppsArray, ArrayList<ApplicationData> LeftHalf, ArrayList<ApplicationData> RightHalf) {//merges the subarrays
         int a,b,c;
-
-
         a = 0;
         b = 0;
         c = 0;
-
         while(a < LeftHalf.size() && b < RightHalf.size()) {
             if (LeftHalf.get(a).getAppMemory() <= RightHalf.get(b).getAppMemory()) {
                 AppsArray.set(c++, LeftHalf.get(a++));
@@ -108,7 +123,6 @@ public class TManagerController{
                 AppsArray.set(c++, RightHalf.get(b++));
             }
         }
-
         while (a < LeftHalf.size()) {
                 AppsArray.set(c++, LeftHalf.get(a++));
         }

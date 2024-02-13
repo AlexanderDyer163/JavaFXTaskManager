@@ -93,8 +93,10 @@ public class TaskManagerGUI extends Application {
             for (int i = 0; i != processes.size() - 1; i++) {
                 //splits the output into application and removes unnecessary information
                 List<String> CurrentLine = new ArrayList<>(Arrays.asList(processes.get(i).split(",")));
-                if ((CurrentLine.get(3).equals("\"0\"") == false) && (CurrentLine.get(2).equals("\"Console\"") == true)) {
+                if ((!CurrentLine.get(3).equals("\"0\"")) && (CurrentLine.get(2).equals("\"Console\"") == true)) {
+                    if(CurrentLine.size()!=5){
                     ActiveSessions.add(new ApplicationData(CurrentLine.get(0).replace("\"",""), Integer.parseInt((CurrentLine.get(4) + CurrentLine.get(5)).replace(" K","").replace("\"",""))));//removes quotation marks from both, and concats items 4 and 5 as the numbers have comas >= 10000
+                    }
                 }
             }
             return ActiveSessions;
