@@ -93,7 +93,7 @@ public class TManagerController{
                 for (int i = 0; i < AppsArray.size();i++){
                     JustNames.add(AppsArray.get(i).getAppName());
                 }
-                Collections.sort(JustNames);
+                Collections.sort(JustNames);//couldnt be bothered to do another merge sort for alphanumerics
                 ArrayList<ApplicationData> FinalArray = new ArrayList();
                 for (int i = 0; i < AppsArray.size();i++){
                     for (int j = 0; j < AppsArray.size();j++){
